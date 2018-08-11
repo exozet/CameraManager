@@ -210,6 +210,20 @@ class ViewController: UIViewController {
             qualityLabel.text = "Low"
         case .medium:
             qualityLabel.text = "Medium"
+        case .cif352x288:
+            qualityLabel.text = "cif"
+        case .vga640x480:
+            qualityLabel.text = "VGA"
+        case .hd1280x720:
+            qualityLabel.text = "hd"
+        case .hd1920x1080:
+            qualityLabel.text = "fullHD"
+        case .hd4K3840x2160:
+            qualityLabel.text = "4k"
+        case .iFrame960x540:
+            qualityLabel.text = "iFrameSmall"
+        case .iFrame1280x720:
+            qualityLabel.text = "iFrameBig"
         }
     }
 }

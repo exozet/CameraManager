@@ -107,12 +107,23 @@
                                             <action selector="locateMeButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="huy-LH-yAF"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vvy-9n-sxv">
+                                        <rect key="frame" x="31" y="23" width="46" height="30"/>
+                                        <state key="normal" title="quali"/>
+                                        <connections>
+                                            <action selector="changeCameraQuality" destination="BYZ-38-t0r" eventType="touchUpInside" id="bO3-ll-4p8"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.015686274509803921" green="0.054901960784313725" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="2Cu-5B-8Wz" firstAttribute="leading" secondItem="vvy-9n-sxv" secondAttribute="trailing" constant="58" id="App-vg-ARI"/>
                                     <constraint firstItem="2Cu-5B-8Wz" firstAttribute="top" secondItem="1mh-eT-4mm" secondAttribute="top" constant="13" id="BgG-Xj-ZmZ"/>
                                     <constraint firstItem="2Cu-5B-8Wz" firstAttribute="centerX" secondItem="1mh-eT-4mm" secondAttribute="centerX" id="JN1-xZ-LeR"/>
+                                    <constraint firstAttribute="bottom" secondItem="vvy-9n-sxv" secondAttribute="bottom" constant="23" id="cZw-iR-6UP"/>
                                     <constraint firstAttribute="trailing" secondItem="3uo-sy-vdf" secondAttribute="trailing" constant="30" id="cih-vq-fzc"/>
+                                    <constraint firstItem="vvy-9n-sxv" firstAttribute="top" secondItem="1mh-eT-4mm" secondAttribute="top" constant="23" id="dfi-7o-90d"/>
+                                    <constraint firstItem="vvy-9n-sxv" firstAttribute="leading" secondItem="1mh-eT-4mm" secondAttribute="leading" constant="31" id="m0o-tC-Kwj"/>
                                     <constraint firstItem="3uo-sy-vdf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1mh-eT-4mm" secondAttribute="leading" constant="20" symbolic="YES" id="vWR-TH-d5A"/>
                                     <constraint firstItem="3uo-sy-vdf" firstAttribute="centerY" secondItem="1mh-eT-4mm" secondAttribute="centerY" id="vcw-y6-hkh"/>
                                     <constraint firstItem="2Cu-5B-8Wz" firstAttribute="centerY" secondItem="1mh-eT-4mm" secondAttribute="centerY" id="vp6-a9-jRg"/>

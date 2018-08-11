@@ -33,7 +33,7 @@ public enum CameraOutputMode {
 }
 
 public enum CameraOutputQuality: Int {
-    case low, medium, high
+    case low, medium, high, cif352x288, vga640x480, hd1280x720, hd1920x1080, hd4K3840x2160, iFrame960x540, iFrame1280x720
 }
 
 
@@ -614,9 +614,23 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                             videoConnection.isVideoMirrored = (cameraDevice == CameraDevice.front && shouldFlipFrontCameraImage)
                         }
                         
+                        
+                        videoConnection.observe(\AVCaptureConnection.activeVideoStabilizationMode, options: .new) { connection, change in
+                            print("+++++++++++++++   current Stabilisation \(connection.activeVideoStabilizationMode)")
+                        }
+                        
+                        let formatDescription = port.formatDescription;
+                        let dimensions = CMVideoFormatDescriptionGetDimensions(formatDescription!);
+                        print("DMENSION: \(dimensions.width)x\(dimensions.height)")
+                        
                         if videoConnection.isVideoStabilizationSupported {
                             videoConnection.preferredVideoStabilizationMode = self.videoStabilisationMode
+                            let currentMode = videoConnection.activeVideoStabilizationMode
+                            var x = 0
+                            x = x + 1
+                            print("CURRENT MODE: \(currentMode.rawValue)")
                         }
+
                     }
                 }
             }
@@ -691,7 +705,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
      :returns: Current quality mode: Low / Medium / High
      */
     open func changeQualityMode() -> CameraOutputQuality {
-        guard let newQuality = CameraOutputQuality(rawValue: (cameraOutputQuality.rawValue+1)%3) else { return cameraOutputQuality }
+        guard let newQuality = CameraOutputQuality(rawValue: (cameraOutputQuality.rawValue+1)%10) else { return cameraOutputQuality }
         cameraOutputQuality = newQuality
         return cameraOutputQuality
     }
@@ -1733,6 +1747,20 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                 } else {
                     sessionPreset = AVCaptureSession.Preset.high
                 }
+            case .cif352x288:
+                sessionPreset = AVCaptureSession.Preset.cif352x288
+            case .vga640x480:
+                sessionPreset = AVCaptureSession.Preset.vga640x480
+            case .hd1280x720:
+                sessionPreset = AVCaptureSession.Preset.hd1280x720
+            case .hd1920x1080:
+                sessionPreset = AVCaptureSession.Preset.hd1920x1080
+            case .hd4K3840x2160:
+                sessionPreset = AVCaptureSession.Preset.hd4K3840x2160
+            case .iFrame960x540:
+                sessionPreset = AVCaptureSession.Preset.iFrame960x540
+            case .iFrame1280x720:
+                sessionPreset = AVCaptureSession.Preset.iFrame1280x720
             }
             if validCaptureSession.canSetSessionPreset(sessionPreset) {
                 validCaptureSession.beginConfiguration()

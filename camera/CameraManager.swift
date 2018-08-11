@@ -623,6 +623,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                         let dimensions = CMVideoFormatDescriptionGetDimensions(formatDescription!);
                         print("DMENSION: \(dimensions.width)x\(dimensions.height)")
                         
+                        
                         if videoConnection.isVideoStabilizationSupported {
                             videoConnection.preferredVideoStabilizationMode = self.videoStabilisationMode
                             let currentMode = videoConnection.activeVideoStabilizationMode

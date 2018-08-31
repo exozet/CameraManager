@@ -1357,6 +1357,22 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
             view.clipsToBounds = true
             view.layer.addSublayer(previewLayer)
         })
+        
+       applyStabilisationModeToPreview()
+    }
+    
+    fileprivate func applyStabilisationModeToPreview() {
+        let videoOutput = _getMovieOutput()
+        for connection in videoOutput.connections {
+            for port in connection.inputPorts {
+                if port.mediaType == AVMediaType.video {
+                    let videoConnection = connection as AVCaptureConnection
+                    if videoConnection.isVideoStabilizationSupported {
+                        videoConnection.preferredVideoStabilizationMode = self.videoStabilisationMode
+                    }
+                }
+            }
+        }
     }
     
     fileprivate func _setupMaxZoomScale() {

@@ -318,6 +318,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                 _setupCamera {
                     self._addPreviewLayerToView(view)
                     self.cameraOutputMode = newCameraOutputMode
+                    self._applyStabilisationModeToPreview()
                     if let validCompletion = completion {
                         validCompletion()
                     }
@@ -607,38 +608,41 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
             // setup video mirroring
             for connection in videoOutput.connections {
                 for port in connection.inputPorts {
-                    
+
                     if port.mediaType == AVMediaType.video {
                         let videoConnection = connection as AVCaptureConnection
                         if videoConnection.isVideoMirroringSupported {
                             videoConnection.isVideoMirrored = (cameraDevice == CameraDevice.front && shouldFlipFrontCameraImage)
                         }
-                        
-                        if videoConnection.isVideoStabilizationSupported {
+
+                        if videoConnection.isVideoStabilizationSupported && videoConnection.preferredVideoStabilizationMode != self.videoStabilisationMode {
                             videoConnection.preferredVideoStabilizationMode = self.videoStabilisationMode
                         }
                     }
                 }
             }
-            
-            let specs = [kCMMetadataFormatDescriptionMetadataSpecificationKey_Identifier as String: AVMetadataIdentifier.quickTimeMetadataLocationISO6709,
-                         kCMMetadataFormatDescriptionMetadataSpecificationKey_DataType as String: kCMMetadataDataType_QuickTimeMetadataLocation_ISO6709 as String] as [String : Any]
-            
-            var locationMetadataDesc: CMFormatDescription?
-            CMMetadataFormatDescriptionCreateWithMetadataSpecifications(kCFAllocatorDefault, kCMMetadataFormatType_Boxed, [specs] as CFArray, &locationMetadataDesc)
-            
-            // Create the metadata input and add it to the session.
-            guard let captureSession = captureSession, let locationMetadata = locationMetadataDesc else {
-                    return
+
+            if shouldUseLocationServices == true {  // we dont need to write location meta info if it's not neeeded,
+                                                    // and we also so avoid reconfiguration of camera after start to record (dark images add the beginning of video)
+                let specs = [kCMMetadataFormatDescriptionMetadataSpecificationKey_Identifier as String: AVMetadataIdentifier.quickTimeMetadataLocationISO6709,
+                             kCMMetadataFormatDescriptionMetadataSpecificationKey_DataType as String: kCMMetadataDataType_QuickTimeMetadataLocation_ISO6709 as String] as [String : Any]
+
+                var locationMetadataDesc: CMFormatDescription?
+                CMMetadataFormatDescriptionCreateWithMetadataSpecifications(kCFAllocatorDefault, kCMMetadataFormatType_Boxed, [specs] as CFArray, &locationMetadataDesc)
+
+                // Create the metadata input and add it to the session.
+                guard let captureSession = captureSession, let locationMetadata = locationMetadataDesc else {
+                        return
+                }
+
+                let newLocationMetadataInput = AVCaptureMetadataInput(formatDescription: locationMetadata, clock: CMClockGetHostTimeClock())
+                captureSession.addInputWithNoConnections(newLocationMetadataInput)
+
+                // Connect the location metadata input to the movie file output.
+                let inputPort = newLocationMetadataInput.ports[0]
+                captureSession.add(AVCaptureConnection(inputPorts: [inputPort], output: videoOutput)) // --> this produces dark images add the beginning of the video, see https://stackoverflow.com/questions/43999046/why-is-image-very-dark-with-avcapturesession or this https://forums.developer.apple.com/thread/8746 or this 
             }
 
-            let newLocationMetadataInput = AVCaptureMetadataInput(formatDescription: locationMetadata, clock: CMClockGetHostTimeClock())
-            captureSession.addInputWithNoConnections(newLocationMetadataInput)
-            
-            // Connect the location metadata input to the movie file output.
-            let inputPort = newLocationMetadataInput.ports[0]
-            captureSession.add(AVCaptureConnection(inputPorts: [inputPort], output: videoOutput))
-            
             _updateIlluminationMode(flashMode)
             
             videoOutput.startRecording(to: _tempFilePath(), recordingDelegate: self)
@@ -1358,10 +1362,9 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
             view.layer.addSublayer(previewLayer)
         })
         
-       applyStabilisationModeToPreview()
     }
     
-    fileprivate func applyStabilisationModeToPreview() {
+    fileprivate func _applyStabilisationModeToPreview() {
         let videoOutput = _getMovieOutput()
         for connection in videoOutput.connections {
             for port in connection.inputPorts {

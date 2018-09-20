@@ -42,15 +42,13 @@ class ViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-//        cameraManager.shouldEnableExposure = false
-//        cameraManager.shouldEnableTapToFocus = false
-//        cameraManager.focusMode = .locked
-//        cameraManager.exposureMode = .locked
-//        cameraManager.shouldUseLocationServices = false
-//        cameraManager.shouldFlipFrontCameraImage = false
-//        cameraManager.showAccessPermissionPopupAutomatically = false
-//        cameraManager.videoStabilisationMode = .auto
-        
+        cameraManager.shouldEnableExposure = false
+        cameraManager.shouldEnableTapToFocus = false
+        cameraManager.focusMode = .locked
+        cameraManager.exposureMode = .locked
+        cameraManager.shouldUseLocationServices = false
+        cameraManager.shouldFlipFrontCameraImage = false
+        cameraManager.showAccessPermissionPopupAutomatically = false
         
         navigationController?.navigationBar.isHidden = true
         
@@ -64,40 +62,15 @@ class ViewController: UIViewController {
         footerView.backgroundColor = darkBlue
         headerView.backgroundColor = darkBlue
         
-//        if CLLocationManager.locationServicesEnabled() {
-//            switch CLLocationManager.authorizationStatus() {
-//            case .authorizedAlways, .authorizedWhenInUse:
-//                self.cameraManager.shouldUseLocationServices = true
-//                self.locationButton.isHidden = true
-//            default:
-//                self.cameraManager.shouldUseLocationServices = false
-//            }
-//        }
-
-        
-            // XOZ Camm Settings
-        // this is also setupd in working version above
-//        self.cameraManager.shouldEnableExposure = false
-//        self.cameraManager.videoStabilisationMode = .auto
-        
-        // this are the defaults, so it should not be the reason
-//        self.cameraManager.animateShutter = true
-        self.cameraManager.shouldRespondToOrientationChanges = true
-//        self.cameraManager.shouldKeepViewAtOrientationChanges = false // @TODO: check what is the best setup
-//        self.cameraManager.cameraDevice = .back
-//        self.cameraManager.flashMode = .off // hopefully the user is not stainf the the dark, but when, he has now a ligh on
-//        self.cameraManager.cameraOutputQuality = .high
-        
-        self.cameraManager.shouldUseLocationServices = false
-        
-        // these are changed compared with above setup
-        self.cameraManager.shouldEnableTapToFocus = true
-        self.cameraManager.shouldEnablePinchToZoom = false
-        self.cameraManager.cameraOutputMode = .videoOnly // no pic and without microphone
-        self.cameraManager.focusMode = .continuousAutoFocus // always refocus to get best quality
-        self.cameraManager.exposureMode = .continuousAutoExposure // always recheck to get best quality
-        self.cameraManager.writeFilesToPhoneLibrary = false
-
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .authorizedAlways, .authorizedWhenInUse:
+                self.cameraManager.shouldUseLocationServices = true
+                self.locationButton.isHidden = true
+            default:
+                self.cameraManager.shouldUseLocationServices = false
+            }
+        }
 
         let currentCameraState = cameraManager.currentCameraStatus()
         

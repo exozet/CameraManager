@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -119,16 +118,6 @@
                                     <constraint firstItem="2Cu-5B-8Wz" firstAttribute="centerY" secondItem="1mh-eT-4mm" secondAttribute="centerY" id="vp6-a9-jRg"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CBl-07-tBU">
-                                <rect key="frame" x="16" y="403" width="46" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="46" id="VR2-ay-0Pi"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="onCloseBtnTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="La1-gZ-I2h"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
@@ -137,20 +126,15 @@
                             <constraint firstAttribute="trailing" secondItem="jaF-q9-Eli" secondAttribute="trailing" id="2fZ-BE-g5j"/>
                             <constraint firstAttribute="trailing" secondItem="EI2-CK-oqA" secondAttribute="trailing" id="4RJ-wW-lJr"/>
                             <constraint firstItem="2bK-wq-6Rf" firstAttribute="width" secondItem="EI2-CK-oqA" secondAttribute="width" id="56O-5K-rXl"/>
-                            <constraint firstItem="1mh-eT-4mm" firstAttribute="top" secondItem="CBl-07-tBU" secondAttribute="bottom" constant="59" id="6Xz-5h-ZJa"/>
                             <constraint firstItem="2bK-wq-6Rf" firstAttribute="height" secondItem="EI2-CK-oqA" secondAttribute="height" id="DYE-I2-0Hi"/>
-                            <constraint firstAttribute="bottom" secondItem="CBl-07-tBU" secondAttribute="bottom" constant="135" id="Hhj-P6-fnC"/>
                             <constraint firstItem="EI2-CK-oqA" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="J5f-eN-Hi8"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CBl-07-tBU" secondAttribute="trailing" constant="20" symbolic="YES" id="OnU-7X-zPv"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="1mh-eT-4mm" secondAttribute="bottom" id="Rdu-Tk-6OT"/>
                             <constraint firstItem="jaF-q9-Eli" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Tv6-Ak-cSA"/>
                             <constraint firstItem="2bK-wq-6Rf" firstAttribute="leading" secondItem="1mh-eT-4mm" secondAttribute="leading" id="V6d-nW-qmB"/>
-                            <constraint firstItem="CBl-07-tBU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="cm2-Kd-eok"/>
                             <constraint firstItem="jaF-q9-Eli" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="eAr-PL-deK"/>
                             <constraint firstItem="EI2-CK-oqA" firstAttribute="top" secondItem="jaF-q9-Eli" secondAttribute="bottom" id="km9-dY-k5s"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="2bK-wq-6Rf" secondAttribute="trailing" id="mAc-UD-zg8"/>
                             <constraint firstItem="EI2-CK-oqA" firstAttribute="bottom" secondItem="1mh-eT-4mm" secondAttribute="top" id="mMD-lA-OxS"/>
-                            <constraint firstItem="CBl-07-tBU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="16" id="uGw-lq-eo4"/>
                             <constraint firstItem="1mh-eT-4mm" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="yVI-Jf-LVW"/>
                             <constraint firstItem="2bK-wq-6Rf" firstAttribute="top" secondItem="EI2-CK-oqA" secondAttribute="top" id="yds-5u-XOv"/>
                         </constraints>
@@ -173,7 +157,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1142" y="-6"/>
+            <point key="canvasLocation" x="244" y="-113"/>
         </scene>
         <!--Image-->
         <scene sceneID="EDW-uZ-RNP">
@@ -238,53 +222,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Log-JG-5kP" kind="relationship" relationship="rootViewController" id="2tp-e2-tsb"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="dN9-Xf-fi9"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="atD-jO-HGu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-683" y="-112"/>
-        </scene>
-        <!--First View Controller-->
-        <scene sceneID="Oso-bx-s8L">
-            <objects>
-                <viewController id="Log-JG-5kP" customClass="FirstViewController" customModule="camera" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Dnu-35-n8a"/>
-                        <viewControllerLayoutGuide type="bottom" id="isq-JY-Ro7"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="VUZ-QO-RQd">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1zg-sn-grC">
-                                <rect key="frame" x="131" y="269" width="100" height="100"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="370-nV-4HD"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="k3q-Aw-ibP"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="onBtnShowCam:" destination="Log-JG-5kP" eventType="touchUpInside" id="Uq8-0H-jOR"/>
-                                    <segue destination="BYZ-38-t0r" kind="show" id="Z2Q-es-NbE"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="1zg-sn-grC" secondAttribute="trailingMargin" constant="97" id="4wu-Ez-9su"/>
-                            <constraint firstItem="1zg-sn-grC" firstAttribute="top" secondItem="Dnu-35-n8a" secondAttribute="bottom" constant="205" id="P01-DI-KVc"/>
-                            <constraint firstItem="1zg-sn-grC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="VUZ-QO-RQd" secondAttribute="leadingMargin" id="sJQ-63-WqR"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="SQv-4o-bJy"/>
-                    <connections>
-                        <outlet property="btnShowCam" destination="1zg-sn-grC" id="GFq-1A-fIF"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HqI-GL-qEx" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="98" y="-135"/>
         </scene>
     </scenes>
 </document>

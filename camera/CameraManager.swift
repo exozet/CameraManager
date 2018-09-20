@@ -236,7 +236,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
     open var exposureMode: AVCaptureDevice.ExposureMode = .continuousAutoExposure
     
     /// Property to set video stabilisation mode during a video record session
-    open var videoStabilisationMode : AVCaptureVideoStabilizationMode = .auto
+    open var videoStabilisationMode : AVCaptureVideoStabilizationMode = .off
     
     
     // MARK: - Private properties
@@ -318,7 +318,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                 _setupCamera {
                     self._addPreviewLayerToView(view)
                     self.cameraOutputMode = newCameraOutputMode
-                    self._applyStabilisationModeToPreview()
+                    self._applyStabilisationMode(self.videoStabilisationMode)
                     if let validCompletion = completion {
                         validCompletion()
                     }
@@ -1371,19 +1371,6 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
         
     }
     
-    fileprivate func _applyStabilisationModeToPreview() {
-        let videoOutput = _getMovieOutput()
-        for connection in videoOutput.connections {
-            for port in connection.inputPorts {
-                if port.mediaType == AVMediaType.video {
-                    let videoConnection = connection as AVCaptureConnection
-                    if videoConnection.isVideoStabilizationSupported {
-                        videoConnection.preferredVideoStabilizationMode = self.videoStabilisationMode
-                    }
-                }
-            }
-        }
-    }
     
     fileprivate func _setupMaxZoomScale() {
         var maxZoom = CGFloat(1.0)
@@ -1715,6 +1702,26 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
         }
     }
     
+    fileprivate func _applyStabilisationMode(_ stabilisationMode : AVCaptureVideoStabilizationMode) {
+        switch cameraOutputMode {
+        case .stillImage:
+            break // stabilisation for image capturing is not needed
+        case .videoOnly, .videoWithMic:
+            let videoOutput = _getMovieOutput()
+            for connection in videoOutput.connections {
+                for port in connection.inputPorts {
+                    if port.mediaType == AVMediaType.video {
+                        let videoConnection = connection as AVCaptureConnection
+                        if videoConnection.isVideoStabilizationSupported {
+                            videoConnection.preferredVideoStabilizationMode = stabilisationMode
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    
     fileprivate func _performShutterAnimation(_ completion: (() -> Void)?) {
         
         if let validPreviewLayer = previewLayer {
@@ -1771,6 +1778,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
             _show(NSLocalizedString("Camera error", comment:""), message: NSLocalizedString("No valid capture session found, I can't take any pictures or videos.", comment:""))
         }
     }
+    
     
     fileprivate func _removeMicInput() {
         guard let inputs = captureSession?.inputs else { return }

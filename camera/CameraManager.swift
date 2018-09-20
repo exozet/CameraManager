@@ -235,8 +235,8 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
     /// Property to set exposure mode when tap to focus is used (_focusStart).
     open var exposureMode: AVCaptureDevice.ExposureMode = .continuousAutoExposure
     
-    /// Property to set video stabilisation mode during a video record session
-    open var videoStabilisationMode : AVCaptureVideoStabilizationMode = .off
+    /// Property to set video stabilization mode during a video record session
+    open var videoStabilizationMode : AVCaptureVideoStabilizationMode = .off
     
     
     // MARK: - Private properties
@@ -318,7 +318,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                 _setupCamera {
                     self._addPreviewLayerToView(view)
                     self.cameraOutputMode = newCameraOutputMode
-                    self._applyVideoStabilisationMode(self.videoStabilisationMode)
+                    self._applyVideoStabilizationMode(self.videoStabilizationMode)
                     if let validCompletion = completion {
                         validCompletion()
                     }
@@ -615,8 +615,8 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                             videoConnection.isVideoMirrored = (cameraDevice == CameraDevice.front && shouldFlipFrontCameraImage)
                         }
 
-                        if videoConnection.isVideoStabilizationSupported && videoConnection.preferredVideoStabilizationMode != self.videoStabilisationMode {
-                            videoConnection.preferredVideoStabilizationMode = self.videoStabilisationMode
+                        if videoConnection.isVideoStabilizationSupported && videoConnection.preferredVideoStabilizationMode != self.videoStabilizationMode {
+                            videoConnection.preferredVideoStabilizationMode = self.videoStabilizationMode
                         }
                     }
                 }
@@ -1702,10 +1702,10 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
         }
     }
     
-    fileprivate func _applyVideoStabilisationMode(_ stabilisationMode : AVCaptureVideoStabilizationMode) {
+    fileprivate func _applyVideoStabilizationMode(_ stabilizationMode : AVCaptureVideoStabilizationMode) {
         switch cameraOutputMode {
         case .stillImage:
-            break // stabilisation for image capturing is not needed
+            break // stabilization for image capturing is not needed
         case .videoOnly, .videoWithMic:
             let videoOutput = _getMovieOutput()
             for connection in videoOutput.connections {
@@ -1713,7 +1713,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                     if port.mediaType == AVMediaType.video {
                         let videoConnection = connection as AVCaptureConnection
                         if videoConnection.isVideoStabilizationSupported {
-                            videoConnection.preferredVideoStabilizationMode = stabilisationMode
+                            videoConnection.preferredVideoStabilizationMode = stabilizationMode
                         }
                     }
                 }

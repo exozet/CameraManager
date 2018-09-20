@@ -280,7 +280,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
     fileprivate var coreMotionManager: CMMotionManager!
     
     /// Real device orientation from accelerometer
-    fileprivate var deviceOrientation: UIDeviceOrientation = .portrait
+    fileprivate var deviceOrientation: UIDeviceOrientation = .landscapeLeft
     
     // MARK: - CameraManager
     
@@ -360,7 +360,12 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
      Stops running capture session but all setup devices, inputs and outputs stay for further reuse.
      */
     open func stopCaptureSession() {
-        captureSession?.stopRunning()
+        if let session = self.captureSession {
+            session.stopRunning()
+            debugPrint("+++++ stoppedSession")
+        } else {
+            debugPrint("+++++ ERROR-ERROR: no session to stop")
+        }
         _stopFollowingDeviceOrientation()
     }
     
@@ -370,7 +375,9 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
     open func resumeCaptureSession() {
         if let validCaptureSession = captureSession {
             if !validCaptureSession.isRunning && cameraIsSetup {
+                debugPrint("+++++ try to resume session async")
                 self.sessionQueue.async(execute: {
+                    debugPrint("+++++ try to resume session async - start running")
                     validCaptureSession.startRunning()
                     self._startFollowingDeviceOrientation()
                 })
@@ -394,6 +401,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
      Stops running capture session and removes all setup devices, inputs and outputs.
      */
     open func stopAndRemoveCaptureSession() {
+        debugPrint("+++++ deninit capture Session")
         self.stopCaptureSession()
         let oldAnimationValue = self.animateCameraDeviceChange
         self.animateCameraDeviceChange = false
@@ -621,6 +629,11 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                     }
                 }
             }
+            
+            // Create the metadata input and add it to the session.
+            guard let captureSession = captureSession else {
+                return
+            }
 
             if shouldUseLocationServices == true {  // we dont need to write location meta info if it's not neeeded,
                                                     // and we also so avoid reconfiguration of camera after start to record (dark images add the beginning of video)
@@ -631,7 +644,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                 CMMetadataFormatDescriptionCreateWithMetadataSpecifications(kCFAllocatorDefault, kCMMetadataFormatType_Boxed, [specs] as CFArray, &locationMetadataDesc)
 
                 // Create the metadata input and add it to the session.
-                guard let captureSession = captureSession, let locationMetadata = locationMetadataDesc else {
+                guard let locationMetadata = locationMetadataDesc else {
                         return
                 }
 
@@ -641,8 +654,9 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                 // Connect the location metadata input to the movie file output.
                 let inputPort = newLocationMetadataInput.ports[0]
                 captureSession.add(AVCaptureConnection(inputPorts: [inputPort], output: videoOutput)) // --> this produces dark images add the beginning of the video, see https://stackoverflow.com/questions/43999046/why-is-image-very-dark-with-avcapturesession or this https://forums.developer.apple.com/thread/8746 or this 
-            }
 
+            }
+            
             _updateIlluminationMode(flashMode)
             
             videoOutput.startRecording(to: _tempFilePath(), recordingDelegate: self)
@@ -1119,6 +1133,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
         case .stillImage:
             currentConnection = stillImageOutput?.connection(with: AVMediaType.video)
         case .videoOnly, .videoWithMic:
+            debugPrint("+++++ call getMovieOutput becasue of orientation Change - camera is setuped: \(self.cameraIsSetup) - movieOutput: \(self.movieOutput)")
             currentConnection = _getMovieOutput().connection(with: AVMediaType.video)
             if let location = self.locationManager?.latestLocation {
                 _setVideoWithGPS(forLocation: location)
@@ -1276,8 +1291,9 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
     
     fileprivate func _setupCamera(_ completion: @escaping () -> Void) {
         captureSession = AVCaptureSession()
-        
+        debugPrint("+++++ TRY START TO SETUP SESSION AND CAM ASYNC")
         sessionQueue.async(execute: {
+            debugPrint("+++++ START TO SETUP SESSION AND CAM")
             if let validCaptureSession = self.captureSession {
                 validCaptureSession.beginConfiguration()
                 validCaptureSession.sessionPreset = AVCaptureSession.Preset.high
@@ -1328,7 +1344,9 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                             self.deviceOrientation = .portraitUpsideDown
                         }
                         
-                        self._orientationChanged()
+                        if self.cameraIsSetup && self.movieOutput != nil {
+                            self._orientationChanged()
+                        }
                 })
                 
                 cameraIsObservingDeviceOrientation = true

@@ -318,7 +318,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
                 _setupCamera {
                     self._addPreviewLayerToView(view)
                     self.cameraOutputMode = newCameraOutputMode
-                    self._applyStabilisationMode(self.videoStabilisationMode)
+                    self._applyVideoStabilisationMode(self.videoStabilisationMode)
                     if let validCompletion = completion {
                         validCompletion()
                     }
@@ -1702,7 +1702,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
         }
     }
     
-    fileprivate func _applyStabilisationMode(_ stabilisationMode : AVCaptureVideoStabilizationMode) {
+    fileprivate func _applyVideoStabilisationMode(_ stabilisationMode : AVCaptureVideoStabilizationMode) {
         switch cameraOutputMode {
         case .stillImage:
             break // stabilisation for image capturing is not needed

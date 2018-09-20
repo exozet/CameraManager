@@ -362,10 +362,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
     open func stopCaptureSession() {
         if let session = self.captureSession {
             session.stopRunning()
-            debugPrint("+++++ stoppedSession")
-        } else {
-            debugPrint("+++++ ERROR-ERROR: no session to stop")
-        }
+        } 
         _stopFollowingDeviceOrientation()
     }
     
@@ -375,9 +372,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
     open func resumeCaptureSession() {
         if let validCaptureSession = captureSession {
             if !validCaptureSession.isRunning && cameraIsSetup {
-                debugPrint("+++++ try to resume session async")
                 self.sessionQueue.async(execute: {
-                    debugPrint("+++++ try to resume session async - start running")
                     validCaptureSession.startRunning()
                     self._startFollowingDeviceOrientation()
                 })
@@ -401,7 +396,6 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
      Stops running capture session and removes all setup devices, inputs and outputs.
      */
     open func stopAndRemoveCaptureSession() {
-        debugPrint("+++++ deninit capture Session")
         self.stopCaptureSession()
         let oldAnimationValue = self.animateCameraDeviceChange
         self.animateCameraDeviceChange = false
@@ -1133,7 +1127,6 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
         case .stillImage:
             currentConnection = stillImageOutput?.connection(with: AVMediaType.video)
         case .videoOnly, .videoWithMic:
-            debugPrint("+++++ call getMovieOutput becasue of orientation Change - camera is setuped: \(self.cameraIsSetup) - movieOutput: \(self.movieOutput)")
             currentConnection = _getMovieOutput().connection(with: AVMediaType.video)
             if let location = self.locationManager?.latestLocation {
                 _setVideoWithGPS(forLocation: location)
@@ -1291,9 +1284,7 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
     
     fileprivate func _setupCamera(_ completion: @escaping () -> Void) {
         captureSession = AVCaptureSession()
-        debugPrint("+++++ TRY START TO SETUP SESSION AND CAM ASYNC")
         sessionQueue.async(execute: {
-            debugPrint("+++++ START TO SETUP SESSION AND CAM")
             if let validCaptureSession = self.captureSession {
                 validCaptureSession.beginConfiguration()
                 validCaptureSession.sessionPreset = AVCaptureSession.Preset.high
